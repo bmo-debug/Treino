@@ -8,75 +8,87 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GymDuo">
 <meta name="theme-color" content="#0d0d18">
+<link rel="manifest" href="manifest.json">
 <title>Treino </title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#0d0d18;--card:#181828;--card2:#21213a;--text:#ffffff;--text2:#8888bb;--streak:#FF9500;--xp:#FFD700;--r:18px;--dc:#FF9500;--dcd:#cc7700}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito',system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
-#app{height:100%;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg)}
+html{height:100%;background:var(--bg)}
+body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{touch-action:manipulation}
+#app{height:100%;max-width:430px;margin:0 auto;position:relative;background:var(--bg)}
 
 /* SCREENS */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-.screen.active{transform:translateX(0)}
-.safe-top{height:max(env(safe-area-inset-top),24px);flex-shrink:0}
-.safe-bot{height:max(env(safe-area-inset-bottom),24px);flex-shrink:0}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg);overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.screen.active{display:flex}
+.safe-top{height:max(env(safe-area-inset-top),28px);flex-shrink:0}
+.safe-bot{height:max(env(safe-area-inset-bottom),32px);flex-shrink:0}
 
 /* HOME */
-.home-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 20px}
+.home-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;flex-shrink:0}
 .badge{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:40px;padding:8px 14px;font-weight:900}
 .badge.fire{color:var(--streak);font-size:16px}
 .badge.xp{color:var(--xp);font-size:14px}
 .logo{font-size:22px;font-weight:900;letter-spacing:-0.5px}
 
-.week-strip{display:flex;justify-content:space-between;padding:0 14px 12px}
+.week-strip{display:flex;justify-content:space-between;padding:0 14px 12px;flex-shrink:0}
 .wday{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
 .wday-lbl{font-size:10px;color:var(--text2);font-weight:800;text-transform:uppercase}
-.wday-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card);font-size:13px;border:2px solid transparent;transition:all .2s}
+.wday-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card);font-size:13px;border:2px solid transparent}
 .wday-dot.wkout{background:var(--card2)}
 .wday-dot.done{font-size:15px}
 .wday-dot.tod{box-shadow:0 0 0 3px rgba(255,149,0,.4)}
 
-.today-card{margin:0 14px;border-radius:var(--r);overflow:hidden}
-.today-inner{padding:22px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(135deg,var(--dc),var(--dcd))}
+.today-card{margin:0 14px;border-radius:var(--r);overflow:hidden;flex-shrink:0}
+.today-inner{padding:22px;display:flex;flex-direction:column;gap:6px}
 .today-lbl{font-size:12px;font-weight:800;opacity:.8;text-transform:uppercase;letter-spacing:.5px}
 .today-name{font-size:34px;font-weight:900;line-height:1}
 .today-sub{font-size:14px;font-weight:700;opacity:.85}
 .today-meta{font-size:12px;opacity:.7;margin-top:2px}
-.btn-start{margin-top:14px;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.35);border-radius:40px;padding:14px;color:#fff;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit;transition:all .15s}
-.btn-start:active{transform:scale(.97);background:rgba(255,255,255,.28)}
+.btn-start{margin-top:14px;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.35);border-radius:40px;padding:14px;color:#fff;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit}
+.btn-start:active{opacity:.7}
 
-.rest-day-card{margin:0 14px;border-radius:var(--r);background:var(--card);padding:28px;text-align:center}
+.rest-day-card{margin:0 14px;border-radius:var(--r);background:var(--card);padding:28px;text-align:center;flex-shrink:0}
 .rest-day-card h3{font-size:14px;font-weight:800;color:var(--text2);margin-bottom:10px}
 .rest-day-card p{font-size:26px;font-weight:900}
 .rest-day-card small{font-size:13px;color:var(--text2);font-weight:700;margin-top:8px;display:block}
 
-.stats-box{margin:14px;border-radius:var(--r);background:var(--card);padding:18px}
+.stats-box{margin:14px;border-radius:var(--r);background:var(--card);padding:18px;flex-shrink:0}
 .stats-box h3{font-size:13px;font-weight:800;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px}
 .stats-row{display:flex;gap:10px}
 .stat{flex:1;background:var(--card2);border-radius:14px;padding:12px;text-align:center}
 .stat .v{font-size:26px;font-weight:900}
 .stat .l{font-size:10px;color:var(--text2);font-weight:800;margin-top:2px}
 
-.sched-box{margin:0 14px 14px;border-radius:var(--r);background:var(--card);overflow:hidden}
+.sched-box{margin:0 14px 14px;border-radius:var(--r);background:var(--card);overflow:hidden;flex-shrink:0}
 .sched-box h3{font-size:13px;font-weight:800;color:var(--text2);padding:14px 16px 8px;text-transform:uppercase;letter-spacing:.4px}
-.sched-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.05);cursor:pointer}
+.sched-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid rgba(255,255,255,.05);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .sched-item:active{background:var(--card2)}
-.sched-ico{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sched-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .sched-inf{flex:1}
-.sched-d{font-size:14px;font-weight:800}
-.sched-n{font-size:12px;color:var(--text2);font-weight:700;margin-top:1px}
-.sched-ck{font-size:20px}
+.sched-d{font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sched-n{font-size:12px;color:var(--text2);font-weight:700;margin-top:2px}
+.sched-ck{font-size:20px;flex-shrink:0}
+.today-badge{font-size:11px;border-radius:20px;padding:2px 8px;font-weight:800}
+
+/* INSTALL BANNER */
+.install-ban{margin:0 14px 14px;border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.install-ban-ico{font-size:28px;flex-shrink:0}
+.install-ban-txt{flex:1}
+.install-ban-ttl{font-size:14px;font-weight:900;margin-bottom:2px}
+.install-ban-sub{font-size:12px;opacity:.8;font-weight:700}
+.btn-install{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:20px;padding:8px 16px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
 
 /* WORKOUT */
-.wkt-hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;flex-shrink:0}
+.wkt-hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;flex-shrink:0;position:sticky;top:0;background:var(--bg);z-index:10}
 .btn-bk{width:40px;height:40px;border-radius:50%;background:var(--card);border:none;font-size:20px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit}
 .prog-wrap{flex:1;height:10px;background:var(--card);border-radius:20px;overflow:hidden}
 .prog-fill{height:100%;border-radius:20px;background:var(--dc);transition:width .4s cubic-bezier(.4,0,.2,1)}
 .prog-lbl{font-size:13px;font-weight:800;color:var(--text2);flex-shrink:0;min-width:32px;text-align:right}
 
-.ex-card{margin:0 14px;border-radius:var(--r);background:var(--card);overflow:hidden}
-.ex-hdr{padding:22px 22px 18px;background:linear-gradient(135deg,var(--dc),var(--dcd))}
+.ex-card{margin:0 14px;border-radius:var(--r);background:var(--card);overflow:hidden;flex-shrink:0}
+.ex-hdr{padding:22px 22px 18px}
 .ex-ico{font-size:38px;margin-bottom:8px}
 .ex-nm{font-size:24px;font-weight:900;line-height:1.1}
 .ex-alt{font-size:13px;opacity:.8;font-weight:700;margin-top:4px}
@@ -85,44 +97,42 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .btn-inf{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit}
 
 .ex-body{padding:18px 20px}
-
 .w-sect{margin-bottom:18px}
 .w-lbl{font-size:12px;color:var(--text2);font-weight:800;margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px}
 .w-row{display:flex;align-items:center;gap:10px}
 .w-adj{width:46px;height:46px;border-radius:12px;background:var(--card2);border:none;font-size:22px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit}
-.w-adj:active{background:var(--card2);opacity:.7}
-.w-in{flex:1;background:var(--card2);border:2px solid transparent;border-radius:12px;padding:10px;color:var(--text);font-size:22px;font-weight:900;font-family:inherit;text-align:center;transition:border-color .2s}
+.w-adj:active{opacity:.6}
+.w-in{flex:1;background:var(--card2);border:2px solid transparent;border-radius:12px;padding:10px;color:var(--text);font-size:22px;font-weight:900;font-family:inherit;text-align:center}
 .w-in:focus{outline:none;border-color:var(--dc)}
-.w-unit{font-size:14px;color:var(--text2);font-weight:800}
+.w-unit{font-size:14px;color:var(--text2);font-weight:800;flex-shrink:0}
 .noweight-box{background:var(--card2);border-radius:12px;padding:12px;text-align:center;color:var(--text2);font-size:13px;font-weight:700;margin-bottom:18px}
 
 .sets-sect{margin-bottom:20px}
 .sets-lbl{font-size:12px;color:var(--text2);font-weight:800;margin-bottom:12px;text-transform:uppercase;letter-spacing:.3px}
 .sets-dots{display:flex;gap:8px;flex-wrap:wrap}
-.sdot{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;transition:all .25s}
+.sdot{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
 .sdot.done{background:var(--dc);color:#fff;font-size:18px}
 .sdot.cur{background:rgba(255,149,0,.12);border:2px solid var(--dc);color:var(--dc)}
 .sdot.pend{background:var(--card2);color:var(--text2)}
 
-.btn-do{width:100%;padding:17px;background:var(--dc);border:none;border-radius:var(--r);color:#fff;font-size:18px;font-weight:900;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-do:active{transform:scale(.98);opacity:.88}
+.btn-do{width:100%;padding:17px;background:var(--dc);border:none;border-radius:var(--r);color:#fff;font-size:18px;font-weight:900;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-do:active{opacity:.8}
 
 /* REST OVERLAY */
-.rest-ov{position:absolute;inset:0;z-index:40;background:rgba(13,13,24,.96);backdrop-filter:blur(12px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.rest-ov{position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:40;background:rgba(13,13,24,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);pointer-events:none}
 .rest-ov.on{transform:translateY(0);pointer-events:all}
 .rest-ttl{font-size:16px;font-weight:800;color:var(--text2)}
 .rest-ring{width:188px;height:188px;position:relative;display:flex;align-items:center;justify-content:center}
 .rest-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
 .r-bg{fill:none;stroke:var(--card2);stroke-width:9}
-.r-prog{fill:none;stroke:var(--dc);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.r-prog{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
 .rest-num{font-size:54px;font-weight:900;line-height:1;text-align:center}
 .rest-sub{font-size:12px;color:var(--text2);font-weight:800;margin-top:4px;text-align:center}
 .btn-skip{background:var(--card);border:none;border-radius:40px;padding:14px 28px;color:var(--text2);font-size:16px;font-weight:800;cursor:pointer;font-family:inherit}
-.btn-skip:active{opacity:.7}
 .btn-plus{background:transparent;border:2px solid var(--card2);border-radius:40px;padding:9px 20px;color:var(--text2);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
 
 /* COMPLETE */
-.done-scr{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:14px;min-height:100%}
+.done-scr{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px;text-align:center;gap:14px}
 .done-em{font-size:80px;animation:bob .55s ease infinite alternate}
 @keyframes bob{from{transform:scale(1)}to{transform:scale(1.1) rotate(5deg)}}
 .done-ttl{font-size:38px;font-weight:900}
@@ -131,32 +141,45 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 .done-pill{background:var(--card);border-radius:16px;padding:14px 22px;text-align:center}
 .done-pill .pv{font-size:30px;font-weight:900}
 .done-pill .pl{font-size:11px;color:var(--text2);font-weight:800;margin-top:4px}
-.done-list{background:var(--card);border-radius:var(--r);padding:16px 18px;width:100%;max-width:320px}
+.done-list{background:var(--card);border-radius:var(--r);padding:16px 18px;width:100%;max-width:340px}
 .done-list-ttl{font-size:12px;color:var(--text2);font-weight:800;margin-bottom:10px;text-transform:uppercase;letter-spacing:.3px}
 .done-ex{display:flex;gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06);font-size:14px;font-weight:700;align-items:center}
 .done-ex-ck{margin-left:auto;font-size:16px}
-.btn-hm{margin-top:16px;width:100%;max-width:300px;padding:17px;background:var(--dc);border:none;border-radius:var(--r);color:#fff;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit}
+.btn-hm{width:100%;max-width:300px;padding:17px;border:none;border-radius:var(--r);color:#fff;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit}
 
 /* MODAL */
-.modal-ov{position:absolute;inset:0;z-index:90;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}
-.modal-ov.hi{display:none}
-.modal-sh{position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:26px 26px 0 0;padding:20px 20px 32px;z-index:91;max-height:80vh;overflow-y:auto}
+.modal-ov{position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:90;background:rgba(0,0,0,.75);display:none}
+.modal-ov.show{display:block}
+.modal-sh{position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:26px 26px 0 0;padding:20px 20px 0;max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .modal-hdl{width:40px;height:4px;background:var(--card2);border-radius:2px;margin:0 auto 18px}
 .modal-ic{font-size:32px;margin-bottom:8px}
 .modal-nm{font-size:20px;font-weight:900;margin-bottom:4px}
 .modal-alt{font-size:13px;color:var(--text2);font-weight:700;margin-bottom:14px}
 .modal-step{display:flex;gap:10px;margin-bottom:10px;padding:12px;background:var(--card2);border-radius:12px;align-items:flex-start}
-.step-num{width:26px;height:26px;border-radius:8px;background:var(--dc);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num{width:26px;height:26px;border-radius:8px;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .step-txt{font-size:14px;font-weight:700;line-height:1.45;color:var(--text2)}
 .modal-tip{margin-top:10px;padding:12px 14px;background:rgba(255,149,0,.1);border-left:3px solid var(--streak);border-radius:0 10px 10px 0;font-size:13px;font-weight:700;color:var(--streak)}
-.btn-cls{width:100%;padding:14px;background:var(--card2);border:none;border-radius:var(--r);color:var(--text);font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:14px}
+.btn-cls{width:100%;padding:14px;background:var(--card2);border:none;color:var(--text);font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:14px;margin-bottom:max(env(safe-area-inset-bottom),20px)}
+
+/* INSTALL MODAL */
+.inst-modal{position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:95;background:rgba(0,0,0,.85);display:none;align-items:flex-end}
+.inst-modal.show{display:flex}
+.inst-box{background:var(--card);border-radius:26px 26px 0 0;padding:24px 20px 0;width:100%}
+.inst-hdl{width:40px;height:4px;background:var(--card2);border-radius:2px;margin:0 auto 20px}
+.inst-ttl{font-size:22px;font-weight:900;margin-bottom:6px}
+.inst-sub{font-size:14px;color:var(--text2);font-weight:700;margin-bottom:20px}
+.inst-os{display:flex;gap:10px;margin-bottom:16px}
+.inst-os-btn{flex:1;padding:12px;border-radius:14px;border:2px solid var(--card2);background:transparent;color:var(--text);font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.inst-os-btn.sel{background:var(--dc);border-color:var(--dc)}
+.inst-step{display:flex;gap:12px;padding:12px;background:var(--card2);border-radius:14px;margin-bottom:10px;align-items:center}
+.inst-step-n{width:28px;height:28px;border-radius:8px;background:var(--dc);color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.inst-step-t{font-size:14px;font-weight:700;line-height:1.4}
+.btn-inst-cls{width:100%;padding:15px;background:var(--card2);border:none;border-radius:var(--r);color:var(--text);font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;margin-bottom:max(env(safe-area-inset-bottom),20px)}
 
 /* CONFETTI */
-.cf{position:absolute;pointer-events:none;animation:cf-fall 2s ease forwards}
+.cf{position:fixed;pointer-events:none;animation:cf-fall 2s ease forwards;z-index:99}
 @keyframes cf-fall{0%{transform:translateY(-60px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(800deg);opacity:0}}
-
-/* MISC */
-.h8{height:8px}.h16{height:16px}
+.h8{height:8px;flex-shrink:0}.h16{height:16px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -164,8 +187,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
   <div id="screen-home" class="screen active"></div>
   <div id="screen-workout" class="screen"></div>
   <div id="screen-complete" class="screen"></div>
-  <div id="modal-ov" class="modal-ov hi" onclick="closeModal()">
+  <div id="modal-ov" class="modal-ov" onclick="closeModal()">
     <div id="modal-sh" class="modal-sh" onclick="event.stopPropagation()"></div>
+  </div>
+  <div id="inst-modal" class="inst-modal" onclick="closeInstall()">
+    <div id="inst-box" class="inst-box" onclick="event.stopPropagation()"></div>
   </div>
 </div>
 
@@ -174,233 +200,143 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nunito
 // DATA
 // ═══════════════════════════════════════════
 const W = {
-  wednesday:{
-    id:'wednesday',dayName:'Quarta-feira',short:'Qua',dow:3,
-    name:'Push',sub:'Superior A',em:'🔥',
-    c:'#FF6B35',cd:'#D94F1A',
+  wednesday:{id:'wednesday',dayName:'Quarta-feira',short:'Qua',dow:3,name:'Push',sub:'Superior A',em:'🔥',c:'#FF6B35',cd:'#D94F1A',
     ex:[
       {id:'supino',nm:'Supino no Chão',alt:'Floor Press',sets:4,reps:'10-12',mus:'Peito · Tríceps',ico:'🏋️',rt:90,
-       steps:['Deita-te no chão com joelhos dobrados, pés assentes.','Halteres à altura do peito, cotovelos a 45° do corpo.','Empurra para cima até os braços estenderem completamente.','Baixa controlado até os cotovelos tocarem o chão.'],
-       tip:'O chão limita a amplitude — protege os ombros. Ótimo para iniciantes!'},
+       steps:['Deita-te no chão com joelhos dobrados, pés assentes.','Halteres à altura do peito, cotovelos a 45° do corpo.','Empurra para cima até os braços estenderem completamente.','Baixa controlado até os cotovelos tocarem o chão.'],tip:'O chão limita a amplitude — protege os ombros. Ótimo para iniciantes!'},
       {id:'dev_omb',nm:'Desenvolvimento de Ombros',alt:'Shoulder Press',sets:3,reps:'10-12',mus:'Ombros · Tríceps',ico:'💪',rt:90,
-       steps:['Sentado ou de pé, pés à largura dos ombros.','Halteres ao nível das orelhas, cotovelos a 90°.','Empurra para cima até os braços estenderem (sem bloquear).','Baixa controlado de volta à posição inicial.'],
-       tip:'Mantém o core ativado — não arquees as costas durante o movimento.'},
+       steps:['Sentado ou de pé, pés à largura dos ombros.','Halteres ao nível das orelhas, cotovelos a 90°.','Empurra para cima até os braços estenderem (sem bloquear).','Baixa controlado de volta à posição inicial.'],tip:'Mantém o core ativado — não arquees as costas durante o movimento.'},
       {id:'flexao',nm:'Flexão de Braços',alt:'Push-up',sets:3,reps:'Até à falha',mus:'Peito · Ombros · Tríceps',ico:'🤸',rt:60,nw:true,
-       steps:['Mãos no chão à largura dos ombros, corpo em linha reta.','Baixa o peito até quase tocar o chão, cotovelos a 45°.','Sobe de forma explosiva, core sempre contraído.','Para quando a forma começar a falhar.'],
-       tip:'Qualidade > quantidade. 8 reps perfeitas valem mais que 15 tortas!'},
+       steps:['Mãos no chão à largura dos ombros, corpo em linha reta.','Baixa o peito até quase tocar o chão, cotovelos a 45°.','Sobe de forma explosiva, core sempre contraído.','Para quando a forma começar a falhar.'],tip:'Qualidade > quantidade. 8 reps perfeitas valem mais que 15 tortas!'},
       {id:'elev_lat',nm:'Elevação Lateral',alt:'Lateral Raise',sets:3,reps:'12-15',mus:'Ombros (lateral)',ico:'🦅',rt:60,
-       steps:['De pé, halteres ao lado, palmas viradas para dentro.','Cotovelos ligeiramente dobrados (não bloquear).','Levanta os braços lateralmente até à altura dos ombros.','Baixa controlado em 2-3 segundos.'],
-       tip:'Usa pouco peso — o movimento deve ser lento e controlado, sem balançar.'},
+       steps:['De pé, halteres ao lado, palmas viradas para dentro.','Cotovelos ligeiramente dobrados (não bloquear).','Levanta os braços lateralmente até à altura dos ombros.','Baixa controlado em 2-3 segundos.'],tip:'Usa pouco peso — o movimento deve ser lento e controlado, sem balançar.'},
       {id:'triceps',nm:'Tríceps Francês',alt:'Skull Crusher',sets:3,reps:'12-15',mus:'Tríceps',ico:'💥',rt:60,
-       steps:['Deitado no chão, segura um halter com as duas mãos acima da cabeça.','Mantém os cotovelos apontados para cima, próximos da cabeça.','Dobra os cotovelos, baixando o halter atrás da cabeça.','Estende os braços voltando à posição inicial.'],
-       tip:'Os cotovelos ficam FIXOS — só os antebraços se movem!'}
-    ]
-  },
-  thursday:{
-    id:'thursday',dayName:'Quinta-feira',short:'Qui',dow:4,
-    name:'Posterior',sub:'Inferior D',em:'🦵',
-    c:'#A855F7',cd:'#7c22d3',
+       steps:['Deitado no chão, segura um halter com as duas mãos acima da cabeça.','Mantém os cotovelos apontados para cima, próximos da cabeça.','Dobra os cotovelos, baixando o halter atrás da cabeça.','Estende os braços voltando à posição inicial.'],tip:'Os cotovelos ficam FIXOS — só os antebraços se movem!'}
+    ]},
+  thursday:{id:'thursday',dayName:'Quinta-feira',short:'Qui',dow:4,name:'Posterior',sub:'Inferior D',em:'🦵',c:'#A855F7',cd:'#7c22d3',
     ex:[
       {id:'stiff',nm:'Stiff com Halteres',alt:'Romanian Deadlift',sets:4,reps:'10-12',mus:'Posterior · Glúteos',ico:'🏋️',rt:90,
-       steps:['De pé, halteres à frente das coxas, pés à largura dos ombros.','Mantendo costas retas, inclina o tronco para a frente.','Desce os halteres ao longo das pernas até sentir o posterior esticar.','Contrai o glúteo e volta à posição inicial.'],
-       tip:'O movimento vem da ANCA — não da coluna. Joelhos ligeiramente dobrados.'},
+       steps:['De pé, halteres à frente das coxas, pés à largura dos ombros.','Mantendo costas retas, inclina o tronco para a frente.','Desce os halteres ao longo das pernas até sentir o posterior esticar.','Contrai o glúteo e volta à posição inicial.'],tip:'O movimento vem da ANCA — não da coluna. Joelhos ligeiramente dobrados.'},
       {id:'elev_pelv',nm:'Elevação Pélvica',alt:'Hip Thrust no Chão',sets:4,reps:'12-15',mus:'Glúteos · Posterior',ico:'⬆️',rt:60,
-       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Coloca um halter na zona da anca, segura com as mãos.','Empurra a anca para cima, contraindo o glúteo no topo.','Mantém 1-2 segundos e desce controlado.'],
-       tip:'Não arquees as costas no topo — ativa o abdómen durante todo o movimento.'},
+       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Coloca um halter na zona da anca, segura com as mãos.','Empurra a anca para cima, contraindo o glúteo no topo.','Mantém 1-2 segundos e desce controlado.'],tip:'Não arquees as costas no topo — ativa o abdómen durante todo o movimento.'},
       {id:'bulgaro',nm:'Agachamento Búlgaro',alt:'Bulgarian Split Squat',sets:3,reps:'10-12',mus:'Quadricípite · Glúteos',ico:'🦵',rt:90,
-       steps:['Pé traseiro apoiado num sofá ou cadeira (altura do joelho).','Pé da frente afastado para o joelho não ultrapassar a ponta do pé.','Baixa o joelho de trás até perto do chão.','Empurra pelo calcanhar da frente para subir.'],
-       tip:'Faz todas as reps numa perna antes de trocar. Halteres nas mãos para mais carga.'},
+       steps:['Pé traseiro apoiado num sofá ou cadeira (altura do joelho).','Pé da frente afastado para o joelho não ultrapassar a ponta do pé.','Baixa o joelho de trás até perto do chão.','Empurra pelo calcanhar da frente para subir.'],tip:'Faz todas as reps numa perna antes de trocar. Halteres nas mãos para mais carga.'},
       {id:'ponte',nm:'Ponte para Posterior',alt:'Glute Bridge',sets:3,reps:'12-15',mus:'Glúteos · Isquiotibiais',ico:'🌉',rt:60,
-       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Eleva a anca contraindo o glúteo.','Pausa de 1-2 segundos no topo.','Desce controlado sem deixar a anca tocar no chão entre reps.'],
-       tip:'Variação mais simples que a elevação pélvica — ótima para sentir o glúteo trabalhar.'},
+       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Eleva a anca contraindo o glúteo.','Pausa de 1-2 segundos no topo.','Desce controlado sem deixar a anca tocar no chão entre reps.'],tip:'Variação mais simples que a elevação pélvica — ótima para sentir o glúteo trabalhar.'},
       {id:'prancha',nm:'Prancha Abdominal',alt:'Plank',sets:3,reps:'Máximo',mus:'Core · Abdómen',ico:'📏',rt:60,nw:true,
-       steps:['Posição de prancha nos antebraços (ou mãos).','Corpo em linha reta da cabeça aos calcanhares.','Contrai o abdómen e os glúteos simultaneamente.','Mantém o máximo de tempo possível.'],
-       tip:'Para quando as ancas começarem a subir ou a descer — não cheates a forma!'}
-    ]
-  },
-  saturday:{
-    id:'saturday',dayName:'Sábado',short:'Sáb',dow:6,
-    name:'Pull',sub:'Superior C',em:'💙',
-    c:'#3B82F6',cd:'#1d4ed8',
+       steps:['Posição de prancha nos antebraços (ou mãos).','Corpo em linha reta da cabeça aos calcanhares.','Contrai o abdómen e os glúteos simultaneamente.','Mantém o máximo de tempo possível.'],tip:'Para quando as ancas começarem a subir ou a descer — não cheates a forma!'}
+    ]},
+  saturday:{id:'saturday',dayName:'Sábado',short:'Sáb',dow:6,name:'Pull',sub:'Superior C',em:'💙',c:'#3B82F6',cd:'#1d4ed8',
     ex:[
       {id:'remada',nm:'Remada Curvada',alt:'Dumbbell Row (Serrote)',sets:4,reps:'10-12',mus:'Costas · Bíceps',ico:'🚣',rt:90,
-       steps:['Apoiado num sofá: um joelho e uma mão no apoio.','Corpo paralelo ao chão, halter na mão livre a pendurar.','Puxa o halter para o lado do corpo, cotovelo a apontar para o tecto.','Pausa breve no topo e baixa controlado.'],
-       tip:'Imagina que estás a arrancar um motor de barco. Sente as costas, não o bíceps!'},
+       steps:['Apoiado num sofá: um joelho e uma mão no apoio.','Corpo paralelo ao chão, halter na mão livre a pendurar.','Puxa o halter para o lado do corpo, cotovelo a apontar para o tecto.','Pausa breve no topo e baixa controlado.'],tip:'Imagina que estás a arrancar um motor de barco. Sente as costas, não o bíceps!'},
       {id:'remada_alta',nm:'Remada Alta com Halteres',alt:'Upright Row',sets:3,reps:'12-15',mus:'Trapézio · Ombros',ico:'⬆️',rt:60,
-       steps:['De pé, halteres à frente do corpo, palmas viradas para ti.','Puxa os halteres para cima ao longo do corpo até ao queixo.','Cotovelos sempre ACIMA das mãos durante o movimento.','Baixa controlado.'],
-       tip:'Não exageres no peso — pode causar tensão nos ombros se for demasiado pesado.'},
+       steps:['De pé, halteres à frente do corpo, palmas viradas para ti.','Puxa os halteres para cima ao longo do corpo até ao queixo.','Cotovelos sempre ACIMA das mãos durante o movimento.','Baixa controlado.'],tip:'Não exageres no peso — pode causar tensão nos ombros se for demasiado pesado.'},
       {id:'crucifixo',nm:'Crucifixo Inverso Curvado',alt:'Reverse Fly',sets:3,reps:'12-15',mus:'Deltoide posterior · Trapézio',ico:'🦋',rt:60,
-       steps:['Inclinado para a frente (tronco quase paralelo ao chão).','Halteres a pendurar, palmas viradas uma para a outra.','Abre os braços lateralmente como uma borboleta.','Baixa controlado em 2-3 segundos.'],
-       tip:'Usa peso leve — foca-te em sentir o músculo ENTRE as omoplatas a contrair.'},
+       steps:['Inclinado para a frente (tronco quase paralelo ao chão).','Halteres a pendurar, palmas viradas uma para a outra.','Abre os braços lateralmente como uma borboleta.','Baixa controlado em 2-3 segundos.'],tip:'Usa peso leve — foca-te em sentir o músculo ENTRE as omoplatas a contrair.'},
       {id:'rosca',nm:'Rosca Direta',alt:'Bicep Curl',sets:3,reps:'12-15',mus:'Bíceps',ico:'💪',rt:60,
-       steps:['De pé, halteres ao lado do corpo, palmas para a frente.','Dobra os cotovelos trazendo os halteres até aos ombros.','Mantém os cotovelos fixos ao lado do corpo.','Baixa controlado em 2-3 segundos.'],
-       tip:'Não balances o corpo para ajudar — isso tira trabalho ao bíceps.'},
+       steps:['De pé, halteres ao lado do corpo, palmas para a frente.','Dobra os cotovelos trazendo os halteres até aos ombros.','Mantém os cotovelos fixos ao lado do corpo.','Baixa controlado em 2-3 segundos.'],tip:'Não balances o corpo para ajudar — isso tira trabalho ao bíceps.'},
       {id:'martelo',nm:'Rosca Martelo',alt:'Hammer Curl',sets:3,reps:'12-15',mus:'Bíceps · Braquiorradial',ico:'🔨',rt:60,
-       steps:['Igual à rosca direta mas com palmas viradas uma para a outra.','Imagina que estás a segurar um martelo.','Sobe os halteres até aos ombros, cotovelos fixos.','Baixa controlado em 2-3 segundos.'],
-       tip:'Trabalha o braquiorradial que dá espessura e volume ao braço.'}
-    ]
-  },
-  sunday:{
-    id:'sunday',dayName:'Domingo',short:'Dom',dow:0,
-    name:'Quad',sub:'Inferior B',em:'🟢',
-    c:'#22C55E',cd:'#15803d',
+       steps:['Igual à rosca direta mas com palmas viradas uma para a outra.','Imagina que estás a segurar um martelo.','Sobe os halteres até aos ombros, cotovelos fixos.','Baixa controlado em 2-3 segundos.'],tip:'Trabalha o braquiorradial que dá espessura e volume ao braço.'}
+    ]},
+  sunday:{id:'sunday',dayName:'Domingo',short:'Dom',dow:0,name:'Quad',sub:'Inferior B',em:'🟢',c:'#22C55E',cd:'#15803d',
     ex:[
       {id:'goblet',nm:'Agachamento Cálice',alt:'Goblet Squat',sets:4,reps:'12-15',mus:'Quadricípite · Glúteos',ico:'🏆',rt:90,
-       steps:['Pés ligeiramente mais afastados que a largura dos ombros.','Segura um halter verticalmente com as duas mãos à frente do peito.','Agacha até as coxas ficarem paralelas ao chão (ou mais baixo).','Empurra pelos calcanhares para voltar à posição inicial.'],
-       tip:'Os joelhos devem apontar na mesma direção dos dedos dos pés — sempre!'},
+       steps:['Pés ligeiramente mais afastados que a largura dos ombros.','Segura um halter verticalmente com as duas mãos à frente do peito.','Agacha até as coxas ficarem paralelas ao chão (ou mais baixo).','Empurra pelos calcanhares para voltar à posição inicial.'],tip:'Os joelhos devem apontar na mesma direção dos dedos dos pés — sempre!'},
       {id:'afundo',nm:'Afundo',alt:'Lunges',sets:3,reps:'10-12 por perna',mus:'Quadricípite · Glúteos',ico:'🦵',rt:90,
-       steps:['De pé com halteres nas mãos, dá um passo longo para a frente.','Baixa o joelho de trás até perto do chão (sem tocar).','O joelho da frente não deve ultrapassar a ponta do pé.','Empurra para voltar e alterna as pernas.'],
-       tip:'Podes alternar as pernas ou fazer toda a série numa perna antes de trocar.'},
+       steps:['De pé com halteres nas mãos, dá um passo longo para a frente.','Baixa o joelho de trás até perto do chão (sem tocar).','O joelho da frente não deve ultrapassar a ponta do pé.','Empurra para voltar e alterna as pernas.'],tip:'Podes alternar as pernas ou fazer toda a série numa perna antes de trocar.'},
       {id:'sumo',nm:'Agachamento Sumô',alt:'Sumo Squat',sets:3,reps:'12-15',mus:'Adutores · Glúteos · Quad',ico:'🥊',rt:90,
-       steps:['Pés bem afastados, dedos apontados para fora (~45°).','Segura um halter verticalmente com as duas mãos ao centro.','Agacha mantendo os joelhos alinhados com os dedos dos pés.','Sobe contraindo glúteos e adutores.'],
-       tip:'A posição mais larga ativa mais a parte interna das coxas (adutores).'},
+       steps:['Pés bem afastados, dedos apontados para fora (~45°).','Segura um halter verticalmente com as duas mãos ao centro.','Agacha mantendo os joelhos alinhados com os dedos dos pés.','Sobe contraindo glúteos e adutores.'],tip:'A posição mais larga ativa mais a parte interna das coxas (adutores).'},
       {id:'panturrilha',nm:'Panturrilha Unilateral',alt:'Single-leg Calf Raise',sets:4,reps:'15-20',mus:'Gastrocnémio · Sóleo',ico:'👟',rt:60,
-       steps:['Apoiado numa parede ou cadeira para equilíbrio.','Levanta um pé do chão — apoiado apenas numa perna.','Eleva o calcanhar o máximo possível, contrai a panturrilha.','Pausa de 1 segundo no topo e desce controlado.'],
-       tip:'Faz toda a série numa perna antes de trocar. Amplitude completa = mais resultado.'},
+       steps:['Apoiado numa parede ou cadeira para equilíbrio.','Levanta um pé do chão — apoiado apenas numa perna.','Eleva o calcanhar o máximo possível, contrai a panturrilha.','Pausa de 1 segundo no topo e desce controlado.'],tip:'Faz toda a série numa perna antes de trocar. Amplitude completa = mais resultado.'},
       {id:'crunch',nm:'Abdominal Supra',alt:'Crunch',sets:3,reps:'15-20',mus:'Reto abdominal',ico:'🎯',rt:60,nw:true,
-       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Mãos atrás da cabeça ou cruzadas no peito.','Eleva apenas os ombros do chão, contraindo o abdómen.','Não puxes o pescoço com as mãos!'],
-       tip:'Expira ao subir, inspira ao descer. Movimento pequeno e controlado.'}
-    ]
-  }
+       steps:['Deitado no chão, joelhos dobrados, pés assentes.','Mãos atrás da cabeça ou cruzadas no peito.','Eleva apenas os ombros do chão, contraindo o abdómen.','Não puxes o pescoço com as mãos!'],tip:'Expira ao subir, inspira ao descer. Movimento pequeno e controlado.'}
+    ]}
 };
 
-const ORDER = ['wednesday','thursday','saturday','sunday'];
-const DOW_MAP = {3:'wednesday',4:'thursday',6:'saturday',0:'sunday'};
+const ORDER=['wednesday','thursday','saturday','sunday'];
+const DOW_MAP={3:'wednesday',4:'thursday',6:'saturday',0:'sunday'};
 
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let S = {
-  day:null, exI:0, setI:0,
-  wts:{},
-  restSec:0, restTotal:0, restTmr:null, restOn:false
-};
+let S={day:null,exI:0,setI:0,wts:{},restSec:0,restTotal:0,restTmr:null,restOn:false};
+let DB={streak:0,lastDate:null,doneDates:[],wts:{},xp:0};
 
-let DB = {streak:0,lastDate:null,doneDates:[],wts:{},xp:0};
+function loadDB(){try{const d=localStorage.getItem('gd3');if(d)DB={...DB,...JSON.parse(d)};S.wts={...DB.wts}}catch(e){}}
+function saveDB(){DB.wts={...DB.wts,...S.wts};try{localStorage.setItem('gd3',JSON.stringify(DB))}catch(e){}}
 
-function loadDB(){
-  try{const d=localStorage.getItem('gd2');if(d)DB={...DB,...JSON.parse(d)};S.wts={...DB.wts}}catch(e){}
-}
-function saveDB(){
-  DB.wts={...S.wts};
-  try{localStorage.setItem('gd2',JSON.stringify(DB))}catch(e){}
-}
-
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-const ds = d => (d||new Date()).toISOString().split('T')[0];
-
+const ds=d=>(d||new Date()).toISOString().split('T')[0];
 function todayDow(){return new Date().getDay()}
 function todayId(){return DOW_MAP[todayDow()]||null}
-function isToday(id){return W[id]&&W[id].dow===todayDow()}
-
-function prevScheduledDate(){
-  const sc=[0,3,4,6];
-  let d=new Date(); d.setDate(d.getDate()-1);
-  for(let i=0;i<7;i++){if(sc.includes(d.getDay()))return ds(d);d.setDate(d.getDate()-1)}
-  return null;
-}
-
 function doneToday(){return DB.doneDates.includes(ds())}
 function doneDate(str){return DB.doneDates.includes(str)}
-
-function getMonday(){
-  const t=new Date(), dow=t.getDay();
-  const m=new Date(t);
-  m.setDate(t.getDate()-(dow===0?6:dow-1));
-  return m;
-}
-function weekDateFor(dow){
-  const m=getMonday();
-  const diff=(dow-1+7)%7;
-  const d=new Date(m); d.setDate(m.getDate()+diff);
-  return ds(d);
-}
-function weekDone(){
-  let c=0;
-  ORDER.forEach(id=>{if(doneDate(weekDateFor(W[id].dow)))c++});
-  return c;
-}
-
-function setColor(c,cd){
-  document.documentElement.style.setProperty('--dc',c);
-  document.documentElement.style.setProperty('--dcd',cd||c);
-}
-
-function fmtTime(s){
-  return s>=60?Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0'):s+'s';
-}
+function getMonday(){const t=new Date(),dow=t.getDay(),m=new Date(t);m.setDate(t.getDate()-(dow===0?6:dow-1));return m}
+function weekDateFor(dow){const m=getMonday(),diff=(dow-1+7)%7,d=new Date(m);d.setDate(m.getDate()+diff);return ds(d)}
+function weekDone(){let c=0;ORDER.forEach(id=>{if(doneDate(weekDateFor(W[id].dow)))c++});return c}
+function prevScheduledDate(){const sc=[0,3,4,6];let d=new Date();d.setDate(d.getDate()-1);for(let i=0;i<14;i++){if(sc.includes(d.getDay()))return ds(d);d.setDate(d.getDate()-1)}return null}
+function setColor(c,cd){document.documentElement.style.setProperty('--dc',c);document.documentElement.style.setProperty('--dcd',cd||c)}
+function fmtTime(s){return s>=60?Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0'):s+'s'}
+function isIOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1)}
+function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone}
 
 // ═══════════════════════════════════════════
 // RENDER HOME
 // ═══════════════════════════════════════════
 function renderHome(){
   setColor('#FF9500','#cc7700');
-  const tId=todayId();
-  const tW=tId?W[tId]:null;
-  const dDow=todayDow();
-  const mon=getMonday();
-
-  // Week strip
+  const tId=todayId(),tW=tId?W[tId]:null,dDow=todayDow(),mon=getMonday();
   const days=[{l:'Seg',d:1},{l:'Ter',d:2},{l:'Qua',d:3},{l:'Qui',d:4},{l:'Sex',d:5},{l:'Sáb',d:6},{l:'Dom',d:0}];
   const wStrip=days.map(({l,d})=>{
-    const diff=(d-1+7)%7;
-    const dt=new Date(mon); dt.setDate(mon.getDate()+diff);
-    const dts=ds(dt);
-    const wId=DOW_MAP[d];
-    const isWk=!!wId;
-    const isDone=isWk&&doneDate(dts);
-    const isTod=d===dDow;
+    const diff=(d-1+7)%7,dt=new Date(mon);dt.setDate(mon.getDate()+diff);
+    const dts=ds(dt),wId=DOW_MAP[d],isWk=!!wId,isDone=isWk&&doneDate(dts),isTod=d===dDow;
     const col=wId?W[wId].c:'transparent';
     let cls='wday-dot'+(isWk?' wkout':'')+(isDone?' done':'')+(isTod?' tod':'');
-    const content=isDone?'✓':(isWk?W[wId].em:'');
-    return `<div class="wday">
-      <span class="wday-lbl">${l}</span>
-      <div class="${cls}" style="${isDone?`background:${col};color:#fff`:(isWk?`border-color:${col}`:'')}">${content}</div>
-    </div>`;
+    return `<div class="wday"><span class="wday-lbl">${l}</span><div class="${cls}" style="${isDone?`background:${col};color:#fff`:(isWk?`border-color:${col}`:'')}">${isDone?'✓':(isWk?W[wId].em:'')}</div></div>`;
   }).join('');
 
-  // Today card
   let todayCard='';
-  if(tW && !doneToday()){
+  if(tW&&!doneToday()){
     todayCard=`<div class="today-card"><div class="today-inner" style="background:linear-gradient(135deg,${tW.c},${tW.cd})">
       <div class="today-lbl">Treino de Hoje</div>
-      <div class="today-name">${tW.nm||tW.name}</div>
+      <div class="today-name">${tW.name}</div>
       <div class="today-sub">${tW.sub} · ${tW.dayName}</div>
       <div class="today-meta">${tW.ex.length} exercícios · ${tW.ex.reduce((a,e)=>a+e.sets,0)} séries no total</div>
       <button class="btn-start" onclick="startWkt('${tW.id}')">Começar Treino 🚀</button>
     </div></div>`;
-  } else if(tW && doneToday()){
+  } else if(tW&&doneToday()){
     todayCard=`<div class="today-card"><div class="today-inner" style="background:linear-gradient(135deg,${tW.c},${tW.cd})">
       <div class="today-lbl">Treino de Hoje</div>
-      <div class="today-name">${tW.nm||tW.name} ✅</div>
+      <div class="today-name">${tW.name} ✅</div>
       <div class="today-sub">Concluído! Excelente trabalho!</div>
       <div class="today-meta">${tW.ex.length} exercícios completados hoje</div>
       <button class="btn-start" style="background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.25)" onclick="startWkt('${tW.id}')">Repetir Treino</button>
     </div></div>`;
   } else {
-    todayCard=`<div class="rest-day-card">
-      <h3>Hoje</h3>
-      <p>😴 Dia de Descanso</p>
-      <small>O músculo cresce durante o repouso. Aproveita! 💪</small>
-    </div>`;
+    todayCard=`<div class="rest-day-card"><h3>Hoje</h3><p>😴 Dia de Descanso</p><small>O músculo cresce durante o repouso 💪</small></div>`;
   }
 
-  // Schedule
   const sched=ORDER.map(id=>{
-    const wk=W[id];
-    const isTod2=wk.dow===dDow;
-    const done2=doneDate(weekDateFor(wk.dow));
+    const wk=W[id],isTod2=wk.dow===dDow,done2=doneDate(weekDateFor(wk.dow));
     return `<div class="sched-item" onclick="startWkt('${id}')">
-      <div class="sched-ico" style="background:${wk.c}22">${wk.em}</div>
+      <div class="sched-ico" style="background:${wk.c}33">${wk.em}</div>
       <div class="sched-inf">
-        <div class="sched-d" style="color:${isTod2?wk.c:'var(--text)'}">${wk.short} · ${wk.name}${isTod2?' <span style="font-size:11px;background:'+wk.c+'33;color:'+wk.c+';border-radius:20px;padding:2px 8px">hoje</span>':''}</div>
+        <div class="sched-d" style="color:${isTod2?wk.c:'var(--text)'}">
+          ${wk.short} · ${wk.name}
+          ${isTod2?`<span class="today-badge" style="background:${wk.c}33;color:${wk.c}">hoje</span>`:''}
+        </div>
         <div class="sched-n">${wk.sub} · ${wk.ex.length} exercícios</div>
       </div>
-      <div class="sched-ck">${done2?'✅':''}</div>
+      <div class="sched-ck">${done2?'✅':'›'}</div>
     </div>`;
   }).join('');
+
+  const showInstall=!isStandalone();
+  const installBan=showInstall?`<div class="install-ban" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(255,255,255,.08)">
+    <div class="install-ban-ico">📲</div>
+    <div class="install-ban-txt">
+      <div class="install-ban-ttl">Instalar como App</div>
+      <div class="install-ban-sub">Acesso rápido no ecrã inicial</div>
+    </div>
+    <button class="btn-install" onclick="showInstall()">Instalar</button>
+  </div>`:'';
 
   document.getElementById('screen-home').innerHTML=`
     <div class="safe-top"></div>
@@ -421,9 +357,10 @@ function renderHome(){
       </div>
     </div>
     <div class="sched-box">
-      <h3>Plano Semanal</h3>
+      <h3>Plano Semanal — toca para treinar</h3>
       ${sched}
     </div>
+    ${installBan}
     <div class="safe-bot"></div>
   `;
 }
@@ -432,36 +369,27 @@ function renderHome(){
 // RENDER WORKOUT
 // ═══════════════════════════════════════════
 function renderWkt(){
-  const wk=W[S.day]; if(!wk)return;
+  const wk=W[S.day];if(!wk)return;
   setColor(wk.c,wk.cd);
   const ex=wk.ex[S.exI];
   const pct=Math.round((S.exI/wk.ex.length)*100);
-  const saved=S.wts[ex.id]||'';
-
-  const dots=Array.from({length:ex.sets},(_,i)=>{
-    let cls='sdot '+(i<S.setI?'done':i===S.setI?'cur':'pend');
-    return `<div class="${cls}">${i<S.setI?'✓':i+1}</div>`;
-  }).join('');
-
-  const isLastSet=S.setI>=ex.sets-1;
-  const isLastEx=S.exI>=wk.ex.length-1;
+  const saved=S.wts[ex.id]||DB.wts[ex.id]||'';
+  const circ=2*Math.PI*80;
+  const dots=Array.from({length:ex.sets},(_,i)=>`<div class="sdot ${i<S.setI?'done':i===S.setI?'cur':'pend'}">${i<S.setI?'✓':i+1}</div>`).join('');
+  const isLastSet=S.setI>=ex.sets-1,isLastEx=S.exI>=wk.ex.length-1;
   const btnTxt=isLastSet?(isLastEx?'Terminar Treino 🏆':'Próximo Exercício →'):`Série ${S.setI+1} Completa ✓`;
-
   const wSect=ex.nw
-    ?`<div class="noweight-box">🤸 Usa o peso corporal — sem equipamento</div>`
+    ?`<div class="noweight-box">🤸 Peso corporal — sem equipamento</div>`
     :`<div class="w-sect">
        <div class="w-lbl">⚖️ Peso${saved?' · Último: '+saved+'kg':''}</div>
        <div class="w-row">
          <button class="w-adj" onclick="adjW(-2.5)">−</button>
-         <input class="w-in" id="win" type="number" step="0.5" min="0" value="${saved}" placeholder="kg" oninput="S.wts['${ex.id}']=this.value" inputmode="decimal">
+         <input class="w-in" id="win" type="number" step="0.5" min="0" value="${saved}" placeholder="0" inputmode="decimal">
          <span class="w-unit">kg</span>
          <button class="w-adj" onclick="adjW(2.5)">+</button>
        </div>
      </div>`;
-
-  const circumference=2*Math.PI*80;
-  const restOffset=circumference*(1-Math.max(0,S.restSec)/Math.max(1,S.restTotal));
-
+  const restOffset=circ*(1-Math.max(0,S.restSec)/Math.max(1,S.restTotal));
   document.getElementById('screen-workout').innerHTML=`
     <div class="safe-top"></div>
     <div class="wkt-hdr">
@@ -485,26 +413,20 @@ function renderWkt(){
           <div class="sets-lbl">📊 ${ex.sets} séries × ${ex.reps} reps</div>
           <div class="sets-dots">${dots}</div>
         </div>
-        <button class="btn-do" onclick="doSet()">${btnTxt}</button>
+        <button class="btn-do" onclick="doSet()" style="background:${wk.c}">${btnTxt}</button>
       </div>
     </div>
     <div class="h16"></div>
     <div class="safe-bot"></div>
-
     <div id="rov" class="rest-ov${S.restOn?' on':''}">
       <div class="rest-ttl">💤 Descansa</div>
       <div class="rest-ring">
         <svg viewBox="0 0 188 188" width="188" height="188">
           <circle class="r-bg" cx="94" cy="94" r="80"/>
-          <circle class="r-prog" id="rprog" cx="94" cy="94" r="80"
-            stroke-dasharray="${circumference}"
-            stroke-dashoffset="${restOffset}"
-            style="stroke:${wk.c}"/>
+          <circle class="r-prog" id="rprog" cx="94" cy="94" r="80" stroke="${wk.c}"
+            stroke-dasharray="${circ}" stroke-dashoffset="${restOffset}"/>
         </svg>
-        <div>
-          <div class="rest-num" id="rnum">${fmtTime(S.restSec)}</div>
-          <div class="rest-sub">Próxima série em breve</div>
-        </div>
+        <div><div class="rest-num" id="rnum">${fmtTime(S.restSec)}</div><div class="rest-sub">Próxima série</div></div>
       </div>
       <button class="btn-plus" onclick="addRest()">+15s</button>
       <button class="btn-skip" onclick="skipRest()">Saltar →</button>
@@ -516,13 +438,12 @@ function renderWkt(){
 // RENDER COMPLETE
 // ═══════════════════════════════════════════
 function renderDone(){
-  const wk=W[S.day];
-  setColor(wk.c,wk.cd);
+  const wk=W[S.day];setColor(wk.c,wk.cd);
   const xpG=100+wk.ex.length*10;
   const exList=wk.ex.map(e=>`<div class="done-ex"><span>${e.ico}</span><span>${e.nm}</span><span class="done-ex-ck" style="color:${wk.c}">✓</span></div>`).join('');
-
   document.getElementById('screen-complete').innerHTML=`
     <div class="done-scr">
+      <div class="safe-top"></div>
       <div class="done-em">🏆</div>
       <div class="done-ttl">Incrível!</div>
       <div class="done-sub">Treino ${wk.name} concluído!</div>
@@ -531,13 +452,11 @@ function renderDone(){
         <div class="done-pill"><div class="pv" style="color:var(--streak)">🔥${DB.streak}</div><div class="pl">Streak</div></div>
       </div>
       <div class="done-list">
-        <div class="done-list-ttl">Exercícios completados</div>
-        ${exList}
+        <div class="done-list-ttl">Exercícios completados</div>${exList}
       </div>
       <button class="btn-hm" style="background:${wk.c}" onclick="goHome()">🏠 Ir para o Início</button>
       <div class="safe-bot"></div>
-    </div>
-  `;
+    </div>`;
   confetti(wk.c);
 }
 
@@ -545,54 +464,39 @@ function renderDone(){
 // WORKOUT LOGIC
 // ═══════════════════════════════════════════
 function startWkt(id){
-  S.day=id; S.exI=0; S.setI=0; S.restOn=false;
+  S.day=id;S.exI=0;S.setI=0;S.restOn=false;
   clearInterval(S.restTmr);
-  W[id].ex.forEach(e=>{if(DB.wts[e.id])S.wts[e.id]=DB.wts[e.id]});
-  renderWkt();
-  showScr('workout');
+  renderWkt();showScr('workout');
 }
 
 function doSet(){
-  const wk=W[S.day], ex=wk.ex[S.exI];
+  const wk=W[S.day],ex=wk.ex[S.exI];
   const inp=document.getElementById('win');
-  if(inp) S.wts[ex.id]=inp.value;
-  if(navigator.vibrate) navigator.vibrate(25);
-
-  const isLastSet=S.setI>=ex.sets-1;
-  const isLastEx=S.exI>=wk.ex.length-1;
-
+  if(inp&&inp.value){S.wts[ex.id]=inp.value;DB.wts[ex.id]=inp.value;saveDB()}
+  if(navigator.vibrate)navigator.vibrate(25);
+  const isLastSet=S.setI>=ex.sets-1,isLastEx=S.exI>=wk.ex.length-1;
   if(isLastSet){
-    if(isLastEx){
-      finishWkt();
-    } else {
-      S.exI++; S.setI=0;
-      renderWkt();
-    }
+    if(isLastEx){finishWkt()}
+    else{S.exI++;S.setI=0;renderWkt()}
   } else {
-    S.setI++;
-    renderWkt();
-    startRest(ex.rt||90);
+    S.setI++;renderWkt();startRest(ex.rt||90);
   }
 }
 
 function finishWkt(){
   const todayStr=ds();
-  const alreadyDone=DB.doneDates.includes(todayStr);
-  if(!alreadyDone){
+  if(!DB.doneDates.includes(todayStr)){
     const prev=prevScheduledDate();
-    if(!DB.lastDate){DB.streak=1}
-    else if(DB.lastDate===prev){DB.streak++}
-    else{DB.streak=1}
+    if(!DB.lastDate)DB.streak=1;
+    else if(DB.lastDate===prev)DB.streak++;
+    else DB.streak=1;
     DB.lastDate=todayStr;
     DB.doneDates.push(todayStr);
-    const xpG=100+W[S.day].ex.length*10;
-    DB.xp+=xpG;
+    DB.xp+=(100+W[S.day].ex.length*10);
   }
-  Object.keys(S.wts).forEach(k=>{if(S.wts[k])DB.wts[k]=S.wts[k]});
   saveDB();
-  if(navigator.vibrate) navigator.vibrate([80,40,80,40,160]);
-  renderDone();
-  showScr('complete');
+  if(navigator.vibrate)navigator.vibrate([80,40,80,40,160]);
+  renderDone();showScr('complete');
 }
 
 // ═══════════════════════════════════════════
@@ -600,68 +504,36 @@ function finishWkt(){
 // ═══════════════════════════════════════════
 function startRest(sec){
   clearInterval(S.restTmr);
-  S.restTotal=sec; S.restSec=sec; S.restOn=true;
-  updateRest();
+  S.restTotal=sec;S.restSec=sec;S.restOn=true;updateRest();
   S.restTmr=setInterval(()=>{
-    S.restSec--;
-    updateRest();
-    if(S.restSec<=0){
-      skipRest();
-      if(navigator.vibrate) navigator.vibrate([80,40,80]);
-    }
+    S.restSec--;updateRest();
+    if(S.restSec<=0){skipRest();if(navigator.vibrate)navigator.vibrate([80,40,80])}
   },1000);
 }
 
 function updateRest(){
-  const rnum=document.getElementById('rnum');
-  const rprog=document.getElementById('rprog');
-  const rov=document.getElementById('rov');
-  if(rnum) rnum.textContent=fmtTime(S.restSec);
-  if(rprog){
-    const c=2*Math.PI*80;
-    rprog.style.strokeDashoffset=c*(1-Math.max(0,S.restSec)/Math.max(1,S.restTotal));
-  }
-  if(rov) rov.className='rest-ov'+(S.restOn?' on':'');
+  const rnum=document.getElementById('rnum'),rprog=document.getElementById('rprog'),rov=document.getElementById('rov');
+  if(rnum)rnum.textContent=fmtTime(S.restSec);
+  if(rprog){const c=2*Math.PI*80;rprog.style.strokeDashoffset=c*(1-Math.max(0,S.restSec)/Math.max(1,S.restTotal))}
+  if(rov)rov.className='rest-ov'+(S.restOn?' on':'');
 }
 
-function skipRest(){
-  clearInterval(S.restTmr);
-  S.restOn=false;
-  const rov=document.getElementById('rov');
-  if(rov) rov.classList.remove('on');
-}
+function skipRest(){clearInterval(S.restTmr);S.restOn=false;const r=document.getElementById('rov');if(r)r.classList.remove('on')}
+function addRest(){S.restSec=Math.min(S.restSec+15,600);S.restTotal=Math.max(S.restTotal,S.restSec);updateRest()}
 
-function addRest(){
-  S.restSec=Math.min(S.restSec+15,600);
-  S.restTotal=Math.max(S.restTotal,S.restSec);
-  updateRest();
-}
-
-// ═══════════════════════════════════════════
-// WEIGHT
-// ═══════════════════════════════════════════
 function adjW(d){
-  const inp=document.getElementById('win'); if(!inp)return;
+  const inp=document.getElementById('win');if(!inp)return;
   const ex=W[S.day].ex[S.exI];
-  let v=Math.max(0,Math.round((parseFloat(inp.value)||0)+d)*2/2);
-  // fix rounding
-  v=Math.round((parseFloat(inp.value||0)+d)*2)/2;
-  if(v<0)v=0;
-  inp.value=v;
-  S.wts[ex.id]=String(v);
+  let v=Math.round((parseFloat(inp.value||0)+d)*2)/2;
+  if(v<0)v=0;inp.value=v;S.wts[ex.id]=String(v);
 }
 
 // ═══════════════════════════════════════════
 // INFO MODAL
 // ═══════════════════════════════════════════
 function showInfo(){
-  const ex=W[S.day].ex[S.exI];
-  const wk=W[S.day];
-  const steps=ex.steps.map((s,i)=>`
-    <div class="modal-step">
-      <div class="step-num" style="background:${wk.c}">${i+1}</div>
-      <div class="step-txt">${s}</div>
-    </div>`).join('');
+  const ex=W[S.day].ex[S.exI],wk=W[S.day];
+  const steps=ex.steps.map((s,i)=>`<div class="modal-step"><div class="step-num" style="background:${wk.c}">${i+1}</div><div class="step-txt">${s}</div></div>`).join('');
   const tip=ex.tip?`<div class="modal-tip">💡 ${ex.tip}</div>`:'';
   document.getElementById('modal-sh').innerHTML=`
     <div class="modal-hdl"></div>
@@ -669,28 +541,63 @@ function showInfo(){
     <div class="modal-nm">${ex.nm}</div>
     <div class="modal-alt">${ex.alt} · ${ex.mus}</div>
     ${steps}${tip}
-    <button class="btn-cls" onclick="closeModal()">Fechar</button>
-  `;
-  document.getElementById('modal-ov').classList.remove('hi');
+    <button class="btn-cls" onclick="closeModal()">Fechar</button>`;
+  document.getElementById('modal-ov').classList.add('show');
 }
 
-function closeModal(){
-  document.getElementById('modal-ov').classList.add('hi');
+function closeModal(){document.getElementById('modal-ov').classList.remove('show')}
+
+// ═══════════════════════════════════════════
+// INSTALL GUIDE
+// ═══════════════════════════════════════════
+let instOS=isIOS()?'ios':'android';
+
+function showInstall(){
+  renderInstall();document.getElementById('inst-modal').classList.add('show');
 }
+function closeInstall(){document.getElementById('inst-modal').classList.remove('show')}
+
+function renderInstall(){
+  const ios=[
+    {t:'Abre esta página no <strong>Safari</strong> (obrigatório)'},
+    {t:'Toca no ícone de <strong>Partilhar</strong> (quadrado com seta para cima) na barra inferior'},
+    {t:'Desce e toca em <strong>"Adicionar ao Ecrã de Início"</strong>'},
+    {t:'Toca em <strong>"Adicionar"</strong> no canto superior direito'},
+    {t:'Pronto! O GymDuo aparece no teu ecrã como uma app 🎉'}
+  ];
+  const and=[
+    {t:'Abre esta página no <strong>Chrome</strong>'},
+    {t:'Toca nos <strong>3 pontos</strong> (⋮) no canto superior direito'},
+    {t:'Toca em <strong>"Instalar app"</strong> ou <strong>"Adicionar ao ecrã inicial"</strong>'},
+    {t:'Confirma tocando em <strong>"Instalar"</strong>'},
+    {t:'Pronto! O GymDuo aparece no teu ecrã como uma app 🎉'}
+  ];
+  const steps=(instOS==='ios'?ios:and).map((s,i)=>`<div class="inst-step"><div class="inst-step-n">${i+1}</div><div class="inst-step-t">${s.t}</div></div>`).join('');
+  document.getElementById('inst-box').innerHTML=`
+    <div class="inst-hdl"></div>
+    <div class="inst-ttl">📲 Instalar GymDuo</div>
+    <div class="inst-sub">Segue os passos para o teu sistema:</div>
+    <div class="inst-os">
+      <button class="inst-os-btn${instOS==='ios'?' sel':''}" onclick="setOS('ios')">🍎 iPhone</button>
+      <button class="inst-os-btn${instOS==='android'?' sel':''}" onclick="setOS('android')">🤖 Android</button>
+    </div>
+    ${steps}
+    <button class="btn-inst-cls" onclick="closeInstall()">Fechar</button>`;
+}
+
+function setOS(os){instOS=os;renderInstall()}
 
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
 function showScr(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.scrollTop=0});
   document.getElementById('screen-'+id).classList.add('active');
 }
 
 function goHome(){
-  clearInterval(S.restTmr);
-  S.restOn=false;
-  renderHome();
-  showScr('home');
+  clearInterval(S.restTmr);S.restOn=false;
+  renderHome();showScr('home');
 }
 
 // ═══════════════════════════════════════════
@@ -699,39 +606,13 @@ function goHome(){
 function confetti(mc){
   const cls=['#FFD700','#FF6B35','#A855F7','#22C55E','#3B82F6','#fff',mc];
   const app=document.getElementById('app');
-  for(let i=0;i<50;i++){
+  for(let i=0;i<55;i++){
     setTimeout(()=>{
-      const el=document.createElement('div');
-      el.className='cf';
+      const el=document.createElement('div');el.className='cf';
       const sz=5+Math.random()*9;
       el.style.cssText=`left:${Math.random()*100}%;top:-10px;width:${sz}px;height:${sz}px;background:${cls[Math.floor(Math.random()*cls.length)]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.5+Math.random()*1.5}s`;
-      app.appendChild(el);
-      setTimeout(()=>el.remove(),3500);
-    },i*45);
-  }
-}
-
-// ═══════════════════════════════════════════
-// PWA
-// ═══════════════════════════════════════════
-function setupPWA(){
-  // Inject manifest
-  const m={name:'GymDuo 💪',short_name:'GymDuo',description:'O teu treino diário gamificado',start_url:'.',display:'standalone',orientation:'portrait',background_color:'#0d0d18',theme_color:'#0d0d18',
-    icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d0d18'/%3E%3Ctext y='.9em' font-size='80'%3E%F0%9F%92%AA%3C/text%3E%3C/svg%3E",sizes:'512x512',type:'image/svg+xml'}]};
-  try{
-    const b=new Blob([JSON.stringify(m)],{type:'application/json'});
-    const u=URL.createObjectURL(b);
-    const l=document.createElement('link');l.rel='manifest';l.href=u;
-    document.head.appendChild(l);
-  }catch(e){}
-
-  // Service worker
-  if('serviceWorker' in navigator){
-    try{
-      const sw=`const C='gd-v1';self.addEventListener('install',e=>{self.skipWaiting()});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('Offline'))))})`;
-      const b=new Blob([sw],{type:'application/javascript'});
-      navigator.serviceWorker.register(URL.createObjectURL(b)).catch(()=>{});
-    }catch(e){}
+      app.appendChild(el);setTimeout(()=>el.remove(),3500);
+    },i*40);
   }
 }
 
@@ -739,7 +620,6 @@ function setupPWA(){
 // INIT
 // ═══════════════════════════════════════════
 loadDB();
-setupPWA();
 renderHome();
 </script>
 </body>
