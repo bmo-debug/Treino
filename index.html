@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Treino">
 <meta name="theme-color" content="#0d0d18">
-<link rel="manifest" href="manifest.json">
+
 <title>Treino 💪</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -617,9 +617,59 @@ function confetti(mc){
 }
 
 // ═══════════════════════════════════════════
+// PWA SETUP
+// ═══════════════════════════════════════════
+function setupPWA(){
+  // Inline manifest
+  const manifest={
+    name:'Treino 💪',
+    short_name:'Treino',
+    description:'O teu treino diário gamificado',
+    start_url:'.',
+    display:'standalone',
+    orientation:'portrait',
+    background_color:'#0d0d18',
+    theme_color:'#0d0d18',
+    icons:[
+      {src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0d18'/%3E%3Ctext y='.88em' font-size='78' text-anchor='middle' x='50'%3E%F0%9F%92%AA%3C/text%3E%3C/svg%3E",sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}
+    ]
+  };
+  try{
+    const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('link');
+    link.rel='manifest';link.href=url;
+    document.head.appendChild(link);
+  }catch(e){}
+
+  // Service Worker
+  if('serviceWorker' in navigator){
+    const sw=`
+const CACHE='treino-v2';
+const FILES=['/Treino/','/Treino/index.html'];
+self.addEventListener('install',e=>{
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES).catch(()=>{})));
+  self.skipWaiting();
+});
+self.addEventListener('activate',e=>{
+  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch',e=>{
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('/Treino/'))));
+});`;
+    try{
+      const blob=new Blob([sw],{type:'application/javascript'});
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+    }catch(e){}
+  }
+}
+
+// ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
 loadDB();
+setupPWA();
 renderHome();
 </script>
 </body>
